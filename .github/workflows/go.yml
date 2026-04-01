@@ -16,7 +16,7 @@ jobs:
       - name: OpenAPI Linting (Spectral)
         uses: stoplightio/spectral-action@v0.8.11
         with:
-          file_glob: 'specs/*.yaml' # Ajusta esto a la ruta real de tus specs
+          file_glob: 'specs/api.yaml'
 
   # Coverage report for Unit Testing
   unit-tests:
@@ -29,7 +29,7 @@ jobs:
       - name: Configurar Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22' # Ajusta a la versión exacta que utilices
+          go-version: '1.22' 
           cache: true
           
       - name: Descargar dependencias
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./terraform # Ajusta si tu carpeta de Terraform tiene otro nombre
+        working-directory: ./terraform 
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
