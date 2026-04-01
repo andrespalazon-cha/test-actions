@@ -1,0 +1,83 @@
+name: CI Pipeline (Validación de PR)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # Validate API specs & OpenAPI linting
+  api-validation: 
+    name: Validar Especificaciones de API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+      
+      - name: OpenAPI Linting (Spectral)
+        uses: stoplightio/spectral-action@v0.8.11
+        with:
+          file_glob: 'specs/*.yaml' # Ajusta esto a la ruta real de tus specs
+
+  # Coverage report for Unit Testing
+  unit-tests:
+    name: Pruebas Unitarias y Cobertura (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+      
+      - name: Configurar Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22' # Ajusta a la versión exacta que utilices
+          cache: true
+          
+      - name: Descargar dependencias
+        run: go mod download
+        
+      - name: Ejecutar pruebas y generar cobertura
+        run: go test -v -coverprofile=coverage.out ./...
+        
+      - name: Subir reporte de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: go-coverage-report
+          path: coverage.out
+
+  # GitHub Advanced Security for security scan
+  security-scan:
+    name: Análisis de Seguridad CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+      
+      - name: Inicializar CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'go'
+          
+      - name: Realizar Análisis CodeQL
+        uses: github/codeql-action/analyze@v3
+
+  # Terraform Actions for lint, test (Fase CI)
+  terraform-ci:
+    name: Lint y Validación de Terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform # Ajusta si tu carpeta de Terraform tiene otro nombre
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        
+      - name: Terraform Format Check
+        run: terraform fmt -check
+        
+      - name: Terraform Validate
+        run: terraform validate
