@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # Validate API specs & OpenAPI linting
+  # Validate API specs & OpenAPI linting 
   api-validation: 
     name: Validar Especificaciones de API
     runs-on: ubuntu-latest
