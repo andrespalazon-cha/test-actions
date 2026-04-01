@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # Validate API specs & OpenAPI linting
+  # Validate API specs & OpenAPI linting 
   api-validation: 
     name: Validar Especificaciones de API
     runs-on: ubuntu-latest
@@ -75,6 +75,9 @@ jobs:
       
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
         
       - name: Terraform Format Check
         run: terraform fmt -check
