@@ -1,0 +1,21 @@
+openapi: 3.0.3
+info:
+  title: API de ejemplo
+  description: Especificación de la API para probar el pipeline CI/CD y el linter.
+  version: 1.0.0
+  contact:
+    name: Chakray
+paths:
+  /api/hello:
+    get:
+      summary: Hola mundo
+      description: Devuelve un mensaje de saludo en texto plano para verificar que la API responde correctamente.
+      operationId: getHello
+      responses:
+        '200':
+          description: Respuesta exitosa con el mensaje de saludo.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "¡Hola! La API y el CI/CD funcionan correctamente."
